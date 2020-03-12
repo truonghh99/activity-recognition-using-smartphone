@@ -28,11 +28,17 @@ test = df[~msk]
 
 x_train = train.iloc[:,0:562]
 y_train = train['Activity']
-clf = ExtraTreesClassifier()
-clf = clf.fit(x_train, y_train)
-
 x_test = test.iloc[:,0:562]
 y_test = test['Activity']
-y_pred = clf.predict(x_test)
+clf = ExtraTreesClassifier()
 
-print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+clf = clf.fit(x_train, y_train)
+y_pred = clf.predict(x_test)
+print("Accuracy using all features:", metrics.accuracy_score(y_test, y_pred))
+
+model = SelectFromModel(clf, prefit=True)
+x_train = model.transform(x_train)
+x_test = model.transform(x_test)
+clf = clf.fit(x_train, y_train)
+y_pred = clf.predict(x_test)
+print("Accuracy using selected features:", metrics.accuracy_score(y_test, y_pred))
