@@ -10,7 +10,7 @@ from sklearn.metrics import confusion_matrix
 path = 'dataset/data.csv'
 df = pd.read_csv(path)
 
-msk = np.random.rand(len(df)) < 0.8
+msk = np.random.rand(len(dgf)) < 0.8
 train = df[msk]
 test = df[~msk]
 
