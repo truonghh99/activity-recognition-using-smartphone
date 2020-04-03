@@ -14,13 +14,8 @@ import pydotplus
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.feature_selection import SelectFromModel
 
-path_1 = 'dataset/train.csv'
-path_2 = 'dataset/test.csv'
-
-df_1 = pd.read_csv(path_1)
-df_2 = pd.read_csv(path_2)
-
-df = pd.concat([df_1, df_2])
+path = 'dataset/data.csv'
+df = pd.read_csv(path)
 
 msk = np.random.rand(len(df)) < 0.8
 train = df[msk]
