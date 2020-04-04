@@ -12,14 +12,20 @@ target_labels =  ['LAYING', 'STANDING', 'WALKING', 'WALKING_DOWNSTAIRS', 'WALKIN
 
 #distribution
 pd.Series(df['Activity']).value_counts().plot(kind = 'bar', rot = 0)
-plt.show()
+#plt.show()
 
 
 #df['Activity'] = df["Activity"].map({"LAYING": 1, "STANDING": 2, 'WALKING': 3, 'WALKING_DOWNSTAIRS': 4, 'WALKING_UPSTAIRS': 5, 'SITTING': 6})
 
-# Plot 3 dimensional figures
+#df = df[df['Activity'] != "LAYING"]
+#df = df[df['Activity'] != "WALKING_DOWNSTAIRS"]
+#df = df[df['Activity'] != "WALKING_UPSTAIRS"]
+#df = df[df['Activity'] != "WALKING"]
+#df = df[df['Activity'] != "STANDING"]
+#df = df[df['Activity'] != "SITTING"]
 
-toDraw = list(combinations(df.columns, 3))
+# Plot 3 dimensional figures
+toDraw = list(combinations(df.columns[35:508], 3))
 for i in toDraw:
 	ax = plt.axes(projection='3d')
 	ax.set_xlabel(i[0])
@@ -29,6 +35,11 @@ for i in toDraw:
 	y = df[i[1]]
 	z = df[i[2]]
 	ax.scatter3D(x, y, z, alpha = 0.5, 
-				c = df['Activity'].map({"LAYING": 'red', "STANDING": 'blue', 'WALKING': 'green', 'WALKING_DOWNSTAIRS': 'purple', 'WALKING_UPSTAIRS': 'orange', 'SITTING': 'yellow'}), 
+				c = df['Activity'].map({"LAYING": 'red',
+										"STANDING": 'blue', 
+										'WALKING': 'green', 
+										'WALKING_DOWNSTAIRS': 'purple', 
+										'WALKING_UPSTAIRS': 'orange',
+										'SITTING': 'yellow'}), 
 				label = df['Activity'])
 	plt.show()
