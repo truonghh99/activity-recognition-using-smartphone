@@ -64,7 +64,7 @@ def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('False Positive Rate')
     ax.set_ylabel('True Positive Rate')
-    ax.set_title('Activity Recognition Decision Tree Model performance')
+    ax.set_title('Activity Recognition Decision Tree Model ROC Curve')
     for i in range(n_classes):
         ax.plot(fpr[i], tpr[i], label='ROC curve (area = {}) for label {}'.format(roc_auc[i], target_labels[i]))
     ax.legend(loc="best")

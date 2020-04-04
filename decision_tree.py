@@ -29,7 +29,7 @@ x_train = train.iloc[:,0:562]
 y_train = train['Activity']
 x_test = test.iloc[:,0:562]
 y_test = test['Activity']
-clf = DecisionTreeClassifier(min_impurity_decrease = 0.02)
+clf = DecisionTreeClassifier(min_impurity_decrease = 0.002)
 
 clf = clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
@@ -37,8 +37,9 @@ print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 print("Confusion matrix on training set: ")
 print(confusion_matrix(y_train, clf.predict(x_train)))
 print("Confusion matrix on testing set: ")
-print(confusion_matrix(y_test, y_pred))
+print(confusion_matrix(y_test, y_pred))	
 
+"""
 # visualize decision tree
 dot_data = StringIO()
 tree.export_graphviz(clf, out_file=dot_data,  
@@ -47,6 +48,7 @@ tree.export_graphviz(clf, out_file=dot_data,
 graph = pydotplus.graph_from_dot_data(dot_data.getvalue())  
 graph.write_png('decision_tree_with_min_impurity.png')
 Image(graph.create_png())
+"""
 
 def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     y_score = clf.predict_proba(X_test)
@@ -69,7 +71,7 @@ def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('False Positive Rate')
     ax.set_ylabel('True Positive Rate')
-    ax.set_title('Activity Recognition Decision Tree Model performance')
+    ax.set_title('Activity Recognition Decision Tree Model ROC Curve')
     for i in range(n_classes):
         ax.plot(fpr[i], tpr[i], label='ROC curve (area = {}) for label {}'.format(roc_auc[i], target_labels[i]))
     ax.legend(loc="best")
