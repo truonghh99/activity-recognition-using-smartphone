@@ -17,7 +17,8 @@ import seaborn as sns
 
 path = 'dataset/data.csv'
 df = pd.read_csv(path)
-target_labels = ['WALKING', 'WALKING_UPSTAIRS', 'WALKINGDOWNSTAIRS', 'SITTING', 'STANDING', 'LAYING']
+target_labels =  ['LAYING', 'STANDING', 'WALKING', 'WALKING_DOWNSTAIRS', 'WALKING_UPSTAIRS','SITTING']
+df['Activity'] = df["Activity"].map({"LAYING": 0, "STANDING": 1, 'WALKING': 2, 'WALKING_DOWNSTAIRS': 3, 'WALKING_UPSTAIRS': 4, 'SITTING': 5})
 
 msk = np.random.rand(len(df)) < 0.8
 train = df[msk]

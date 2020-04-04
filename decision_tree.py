@@ -19,7 +19,9 @@ import seaborn as sns
 
 path = 'dataset/data.csv'
 df = pd.read_csv(path)
-target_labels = ['WALKING', 'WALKING_UPSTAIRS', 'WALKINGDOWNSTAIRS', 'SITTING', 'STANDING', 'LAYING']
+target_labels =  ['LAYING', 'STANDING', 'WALKING', 'WALKING_DOWNSTAIRS', 'WALKING_UPSTAIRS','SITTING']
+df['Activity'] = df["Activity"].map({"LAYING": 0, "STANDING": 1, 'WALKING': 2, 'WALKING_DOWNSTAIRS': 3, 'WALKING_UPSTAIRS': 4, 'SITTING': 5})
+print(df['Activity'])
 
 msk = np.random.rand(len(df)) < 0.8
 train = df[msk]
@@ -39,6 +41,7 @@ print(confusion_matrix(y_train, clf.predict(x_train)))
 print("Confusion matrix on testing set: ")
 print(confusion_matrix(y_test, y_pred))	
 
+
 """
 # visualize decision tree
 dot_data = StringIO()
@@ -52,6 +55,7 @@ Image(graph.create_png())
 
 def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     y_score = clf.predict_proba(X_test)
+    print(y_score)
 
     # structures
     fpr = dict()
