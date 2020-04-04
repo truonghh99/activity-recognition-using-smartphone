@@ -29,7 +29,7 @@ x_train = train.iloc[:,0:562]
 y_train = train['Activity']
 x_test = test.iloc[:,0:562]
 y_test = test['Activity']
-clf = DecisionTreeClassifier(min_impurity_decrease = 0.002)
+clf = DecisionTreeClassifier(min_impurity_decrease = 0.02)
 
 clf = clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)

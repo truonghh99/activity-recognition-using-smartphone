@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from collections import Counter
 from mpl_toolkits import mplot3d
-
+from itertools import combinations 
 
 path = 'dataset/data.csv'
 df = pd.read_csv(path)
@@ -19,7 +19,7 @@ plt.show()
 
 # Plot 3 dimensional figures
 
-toDraw = [['tBodyAcc-correlation()-Y,Z','tGravityAcc-max()-X','tGravityAccMag-arCoeff()4'],['tGravityAccMag-arCoeff()4', 'fBodyAccMag-sma()', 'tGravityAcc-max()-X']]
+toDraw = list(combinations(df.columns, 3))
 for i in toDraw:
 	ax = plt.axes(projection='3d')
 	ax.set_xlabel(i[0])
@@ -29,6 +29,6 @@ for i in toDraw:
 	y = df[i[1]]
 	z = df[i[2]]
 	ax.scatter3D(x, y, z, alpha = 0.5, 
-				c = df['Activity'].map({"LAYING": 1, "STANDING": 2, 'WALKING': 3, 'WALKING_DOWNSTAIRS': 4, 'WALKING_UPSTAIRS': 5, 'SITTING': 6}), 
+				c = df['Activity'].map({"LAYING": 'red', "STANDING": 'blue', 'WALKING': 'green', 'WALKING_DOWNSTAIRS': 'purple', 'WALKING_UPSTAIRS': 'orange', 'SITTING': 'yellow'}), 
 				label = df['Activity'])
 	plt.show()
