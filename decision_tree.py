@@ -22,10 +22,24 @@ df = pd.read_csv(path)
 target_labels =  ['LAYING', 'STANDING', 'WALKING', 'WALKING_DOWNSTAIRS', 'WALKING_UPSTAIRS','SITTING']
 df['Activity'] = df["Activity"].map({"LAYING": 0, "STANDING": 1, 'WALKING': 2, 'WALKING_DOWNSTAIRS': 3, 'WALKING_UPSTAIRS': 4, 'SITTING': 5})
 
-msk = np.random.rand(len(df)) < 0.8
-train = df[msk]
-test = df[~msk]
+# assign 66% of each type to training dataset
+num_type = [0,0,0,0,0,0]
+for index, row in df.iterrows():
+    num_type[int(row[57])] += 1
 
+num_test = [int(i * 0.66) for i in num_type]
+
+train, test = [],[]
+
+for index, row in df.iterrows():
+    num_test[int(row[57])] -= 1
+    if (num_test[int(row[57])] >= 0):
+        train.append(row)
+    else:
+        test.append(row)
+ 
+train = pd.DataFrame(train)
+test = pd.DataFrame(test)
 x_train = train.iloc[:,0:562]
 y_train = train['Activity']
 x_test = test.iloc[:,0:562]
@@ -40,21 +54,18 @@ print(confusion_matrix(y_train, clf.predict(x_train)))
 print("Confusion matrix on testing set: ")
 print(confusion_matrix(y_test, y_pred))	
 
-
-"""
 # visualize decision tree
 dot_data = StringIO()
 tree.export_graphviz(clf, out_file=dot_data,  
                 filled=True, rounded=True,
                 special_characters=True,class_names=target_labels)
 graph = pydotplus.graph_from_dot_data(dot_data.getvalue())  
-graph.write_png('decision_tree_with_min_impurity.png')
+graph.write_png('simple_decision_tree.png')
 Image(graph.create_png())
-"""
+
 
 def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     y_score = clf.predict_proba(X_test)
-    print(y_score)
 
     # structures
     fpr = dict()
