@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from sklearn import metrics
 from sklearn.metrics import accuracy_score 
 from sklearn import svm
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import confusion_matrix 
 from sklearn.externals.six import StringIO  
 from IPython.display import Image  
@@ -13,7 +15,11 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 from matplotlib import pyplot as plt
 import seaborn as sns
-
+from sklearn.metrics import plot_roc_curve
+from sklearn.metrics import roc_curve
+from sklearn.metrics import auc
+from matplotlib import pyplot as plt
+import seaborn as sns
 
 path = 'dataset/data.csv'
 df = pd.read_csv(path)
@@ -44,18 +50,42 @@ y_train = train['Activity']
 x_test = test.iloc[:,0:562]
 y_test = test['Activity']
 
-# Decision Tree
 clf_dt = DecisionTreeClassifier(min_impurity_decrease = 0.002)
-clf_dt = clf_dt.fit(x_train, y_train)
-y_pred_dt = clf_dt.predict(x_test)
-
-# SVM 
 clf_svm = svm.SVC()
-clf_svm.fit(x_train, y_train)
-y_pred_svm = clf_svm.predict(x_test)
-
-# Neural Network
 clf_nn = MLPClassifier()
-clf_nn = clf.fit(x_train, y_train)
-y_pred = clf.predict(x_test)
 
+clf_total = [clf_dt, clf_svm, clf_nn]
+clf_names = ["Decision Tree", "SVM", "Neural Network"]
+
+for clf in clf_total:
+	clf.fit(x_train, y_train)
+	#y_pred = clf.predict(x_test)
+	#print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+
+def plot_label(label, X_test, y_test):
+	fig, ax = plt.subplots(figsize=(10,10))
+	ax.plot([0, 1], [0, 1], 'k--')
+	ax.set_xlim([0.0, 1.0])
+	ax.set_ylim([0.0, 1.05])
+	ax.set_xlabel('False Positive Rate')
+	ax.set_ylabel('True Positive Rate')
+	ax.set_title('Activity Recognition ROC Curve for {}'.format(target_labels[label]))
+	index = 0
+	for clf in clf_total:
+		y_score = 0
+		if (index == 1):
+			y_score = clf.decision_function(X_test)
+		else:
+			y_score = clf.predict_proba(X_test)
+		y_test_dummies = pd.get_dummies(y_test, drop_first=False).values
+		fpr, tpr, _ = roc_curve(y_test_dummies[:, label], y_score[:, label])
+		roc_auc = auc(fpr, tpr)
+		ax.plot(fpr, tpr, label='ROC curve (area = {}) using {}'.format(roc_auc, clf_names[index]))
+		index += 1
+	ax.legend(loc="best")
+	ax.grid(alpha=.4)
+	sns.despine()
+	plt.show()
+
+for i in range(6):
+	plot_label(i, x_test, y_test)
