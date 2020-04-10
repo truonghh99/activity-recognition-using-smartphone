@@ -9,9 +9,10 @@ path = 'dataset/data.csv'
 df = pd.read_csv(path)
 
 target_labels =  ['LAYING', 'STANDING', 'WALKING', 'WALKING_DOWNSTAIRS', 'WALKING_UPSTAIRS','SITTING']
+colors = ['red', 'blue', 'green', 'purple', 'orange', 'yellow']
 
 #distribution
-pd.Series(df['Activity']).value_counts().plot(kind = 'bar', rot = 0)
+#pd.Series(df['Activity']).value_counts().plot(kind = 'bar', rot = 0)
 #plt.show()
 
 
@@ -23,6 +24,13 @@ pd.Series(df['Activity']).value_counts().plot(kind = 'bar', rot = 0)
 #df = df[df['Activity'] != "WALKING"]
 #df = df[df['Activity'] != "STANDING"]
 #df = df[df['Activity'] != "SITTING"]
+
+ax = plt.subplot(111)
+for i in range (6):
+	ax.scatter(1, 1, label = target_labels[i], c = colors[i])
+
+ax.legend()
+plt.show()
 
 # Plot 3 dimensional figures
 toDraw = list(combinations(df.columns[35:508], 3))
@@ -41,5 +49,5 @@ for i in toDraw:
 										'WALKING_DOWNSTAIRS': 'purple', 
 										'WALKING_UPSTAIRS': 'orange',
 										'SITTING': 'yellow'}), 
-				label = df['Activity'])
+				)
 	plt.show()
