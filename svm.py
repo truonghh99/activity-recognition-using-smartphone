@@ -13,6 +13,7 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 from matplotlib import pyplot as plt
 import seaborn as sns
+from sklearn.feature_selection import SelectFromModel
 
 
 path = 'dataset/data.csv'
@@ -44,7 +45,7 @@ y_train = train['Activity']
 x_test = test.iloc[:,0:562]
 y_test = test['Activity']
 
-clf = svm.SVC(kernel = 'rbf')
+clf = svm.SVC(kernel = 'linear')
 clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
 
@@ -53,6 +54,7 @@ print("Confusion matrix on training set: ")
 #print(confusion_matrix(y_train, clf.predict(x_train)))
 print("Confusion matrix on testing set: ")
 #print(confusion_matrix(y_test, y_pred))
+print(clf.coef_.shape[-1])
 
 def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     y_score = clf.decision_function(X_test)
