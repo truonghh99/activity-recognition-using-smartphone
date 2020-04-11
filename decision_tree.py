@@ -22,6 +22,12 @@ df = pd.read_csv(path)
 target_labels =  ['LAYING', 'STANDING', 'WALKING', 'WALKING_DOWNSTAIRS', 'WALKING_UPSTAIRS','SITTING']
 df['Activity'] = df["Activity"].map({"LAYING": 0, "STANDING": 1, 'WALKING': 2, 'WALKING_DOWNSTAIRS': 3, 'WALKING_UPSTAIRS': 4, 'SITTING': 5})
 
+path_feature='raw/features.txt'
+f = open(path_feature)
+features = f.readlines()
+f.close()
+#print(features)
+
 # assign 66% of each type to training dataset
 num_type = [0,0,0,0,0,0]
 for index, row in df.iterrows():
@@ -44,7 +50,7 @@ x_train = train.iloc[:,0:562]
 y_train = train['Activity']
 x_test = test.iloc[:,0:562]
 y_test = test['Activity']
-clf = DecisionTreeClassifier(min_impurity_decrease = 0.002)
+clf = DecisionTreeClassifier()
 
 clf = clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
@@ -54,15 +60,15 @@ print(confusion_matrix(y_train, clf.predict(x_train)))
 print("Confusion matrix on testing set: ")
 print(confusion_matrix(y_test, y_pred))	
 
+
 # visualize decision tree
 dot_data = StringIO()
 tree.export_graphviz(clf, out_file=dot_data,  
                 filled=True, rounded=True,
-                special_characters=True,class_names=target_labels)
+                special_characters=True,class_names=target_labels, feature_names=features)
 graph = pydotplus.graph_from_dot_data(dot_data.getvalue())  
-graph.write_png('simple_decision_tree.png')
+graph.write_png('overfitting.png')
 Image(graph.create_png())
-
 
 def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     y_score = clf.predict_proba(X_test)
@@ -93,4 +99,4 @@ def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     sns.despine()
     plt.show()
 
-plot_multiclass_roc(clf, x_test, y_test, n_classes=6, figsize=(16, 10))
+#plot_multiclass_roc(clf, x_test, y_test, n_classes=6, figsize=(16, 10))
