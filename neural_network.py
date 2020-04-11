@@ -55,9 +55,13 @@ clf = clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 print("Confusion matrix on training set: ")
-print(confusion_matrix(y_train, clf.predict(x_train)))
+#print(confusion_matrix(y_train, clf.predict(x_train)))
 print("Confusion matrix on testing set: ")
-print(confusion_matrix(y_test, y_pred))
+#print(confusion_matrix(y_test, y_pred))
+
+print("Outputs: ", clf.n_outputs_)
+print("Function: ", clf.out_activation_)
+print("Iter: ", clf.n_iter_)
 
 def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     y_score = clf.predict_proba(X_test)
@@ -88,4 +92,4 @@ def plot_multiclass_roc(clf, X_test, y_test, n_classes, figsize):
     sns.despine()
     plt.show()
 
-plot_multiclass_roc(clf, x_test, y_test, n_classes=6, figsize=(16, 10))
+#plot_multiclass_roc(clf, x_test, y_test, n_classes=6, figsize=(16, 10))
